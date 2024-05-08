@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title>Title</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<p th:if="${alreadyAcceptedOrDeclined==true}" class="alert alert-danger">Error deleting the request! Request status has changed.</p>
+<table class="table">
+    <p th:if="${noDoctorsAvailable==true}" class="alert alert-danger">Sorry, no doctors available!</p>
+<form th:if="${patient.requestStatus==T(com.example.demo.model.RequestStatus).NO_REQUEST and noDoctorsAvailable!=true}" th:action="@{'/patient/select' +'/'+ ${patient.email}}" method="POST" class="my-3">
+    <label th:if="${patient.requestStatus==T(com.example.demo.model.RequestStatus).NO_REQUEST}" for="doctorEmail">Select Doctor:</label>
+    <select th:if="${patient.requestStatus==T(com.example.demo.model.RequestStatus).NO_REQUEST}" id="doctorEmail" name="doctorEmail" class="form-control">
+        <option th:each="doctor: ${allDoctors}" th:text="${doctor.name}" th:value="${doctor.email}"></option>
+    </select><br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<div th:if="${patient.requestStatus!=T(com.example.demo.model.RequestStatus).NO_REQUEST}" class="my-3">
+    <span th:text="'Request Status with Dr.'+${patient.doctorRequested.name}" class="font-weight-bold"></span><span th:text="${patient.requestStatus}" class="ml-2"></span>
+    <a th:href="@{'/patient/request/new/' + ${patient.email}}" th:if="${patient.requestStatus ==T(com.example.demo.model.RequestStatus).ACCEPTED or patient.requestStatus ==T(com.example.demo.model.RequestStatus).DECLINED}" class="btn btn-success ml-2">Create new request</a>
+    <a th:href="@{'/patient/request/delete/' + ${patient.email}+'/'+ ${patient.doctorRequested.email}}" th:if="${patient.requestStatus ==T(com.example.demo.model.RequestStatus).PENDING}" class="btn btn-danger ml-2">Delete request</a>
+</div>
+<a th:href="@{'/logout/'+${patient.email}}" class="btn btn-secondary">Logout</a>
+
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

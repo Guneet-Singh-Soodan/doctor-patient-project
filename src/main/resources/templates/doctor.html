@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional Bootstrap theme -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<p>Patients Requests</p>
+<p th:if="${requestAlreadyAcceptedOrDeclined==true}" class="alert alert-danger">The request was already accepted or declined!</p>
+<p th:if="${requestWithdrawn==true}" class="alert alert-danger">The request that you accepted or declined was withdrawn by the patient!</p>
+<table class="table">
+    <tr th:each="patient : ${doctor.patientsRequests}">
+        <td th:text="${patientStat.index+1 + '. ' + patient.name}" /><td><a th:href="@{'/doctor/accept/' + ${doctor.email} + '/' + ${patient.email}}" class="btn btn-primary">Accept</a></td><td><a th:href="@{'/doctor/decline/' + ${doctor.email} + '/' + ${patient.email}}" class="btn btn-danger">Decline</a></td>
+    </tr>
+</table>
+
+<p>Patients Accepted History</p>
+<table class="table">
+    <tr th:each="patient : ${doctor.patientsAccepted}">
+        <td th:text="${patientStat.index+1 + '. ' + patient.name}" /><td><a th:href="@{'/doctor/remove/accepted/' + ${doctor.email} + '/' + ${patient.email}}" class="btn btn-danger">Remove</a></td>
+    </tr>
+</table>
+
+<p>Patients Declined History</p>
+<table class="table">
+    <tr th:each="patient : ${doctor.patientsDeclined}">
+        <td th:text="${patientStat.index+1 + '. ' + patient.name}" /><td><a th:href="@{'/doctor/remove/declined/' + ${doctor.email} + '/' + ${patient.email}}" class="btn btn-danger">Remove</a></td>
+    </tr>
+</table>
+
+<a th:href="@{'/logout/' + ${doctor.email}}" class="btn btn-secondary">Logout</a>
+</body>
+</html>
