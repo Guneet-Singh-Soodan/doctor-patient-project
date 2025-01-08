@@ -1,6 +1,5 @@
 //hello, world
 //hello, world
-//hello, world
 package com.example.demo.controller;
 
 import com.example.demo.model.*;
